@@ -3,12 +3,13 @@ var cors = require('cors')
 const app = express()
 const port = process.env.PORT || 5000
 
+//midelwar
 app.use(cors())
 
-
+const shopCategory = require('./data/shopCategory.json');
 
 app.get('/', (req, res) => {
-  res.send("Hello Nayem")
+  res.send(shopCategory)
 })
 
 
