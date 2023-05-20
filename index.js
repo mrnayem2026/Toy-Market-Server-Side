@@ -60,11 +60,30 @@ async function run() {
     // delete specific toy from database by id  
     app.delete('/toys/:id', async (req, res) => {
       const id = req.params.id;
-      console.log(id);
       const query = { _id: new ObjectId(id) };
       const result = toysCollection.deleteOne(query);
       res.send(result);
     })
+
+       // Update a data
+       app.put('/toys/:id', async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) };
+        const options = { upsert: true };
+        const updatedToy = req.body;
+        console.log(updatedToy);
+  
+        const toy = {
+          $set: {
+            price: updatedToy.price,
+            availableQuantity: updatedToy.availableQuantity,
+            description: updatedToy.description
+          }
+        }
+        const result = toysCollection.updateOne(filter, options, toy);
+        res.send(result)
+      })
+  
 
 
     // Send a ping to confirm a successful connection
