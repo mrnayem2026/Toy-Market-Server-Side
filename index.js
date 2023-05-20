@@ -1,6 +1,9 @@
 const express = require('express')
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 var cors = require('cors')
+
+
 const app = express()
 const port = process.env.PORT || 5000
 
@@ -12,7 +15,7 @@ app.use(express.json())
 const shopCategory = require('./data/shopCategory.json');
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+
 const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@mrn.gtqnz.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -39,12 +42,21 @@ async function run() {
       res.send(result);
     })
 
-    // get all  data from database
+    // get all  Toys from database
     app.get('/toys', async (req, res) => {
       const corsor = toysCollection.find();
       const result = await corsor.toArray();
       res.send(result)
     })
+
+      // get specific toy from database by id 
+      app.get('/toys/:id', async (req, res) => {
+        const id = req.params.id;
+        console.log(id);
+        const query = { _id: new ObjectId(id) }
+        const result = toysCollection.findOne(query);
+        res.send(result);
+      })
 
 
     // Send a ping to confirm a successful connection
